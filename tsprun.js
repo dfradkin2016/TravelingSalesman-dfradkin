@@ -30,7 +30,8 @@ $(document).ready( function() {
 	
 	
 	$("#button1").click( function() {
-		
+		nnX = [];
+		nny = [];
 		//do algorithm
 		//connect(dotX, dotY, "#55C")
 		NearestNeighbor();
@@ -43,7 +44,12 @@ $(document).ready( function() {
 	});
 	
 	
-	
+	$("#button2").click( function() {
+		nnX = [];
+		nny = [];
+		SmallestIncrease();
+		connect(nnX, nnY, "#66FF66");
+	});
 });
 
 function connect(xs, ys, color)
@@ -72,19 +78,59 @@ function NearestNeighbor()
 	for (var i = 0; i < dotX.length; i++)
 	{
 		var closest = 0;
-		var max = Number.MAX_VALUE;
-		for (var j = 1; j < nnX.length; j++)
+		var furthest = Number.MAX_VALUE;
+		for (var j = 0; j < nnX.length; j++)
 		{
-			if (distance(dotX[j],nnX[j],dotY[j],nnY[j]) < max)
+			if (distance(dotX[i],nnX[j],dotY[i],nnY[j]) < furthest)
 			{
-				max = distance(dotX[j],nnX[j],dotY[j],nnY[j]);
+				console.log(distance(dotX[i],nnX[j],dotY[i],nnY[j]));
+				console.log(furthest);
+				furthest = distance(dotX[i],nnX[j],dotY[i],nnY[j]);
 				closest = j;
 			}
 		}
+		console.log(closest);
 		nnX.splice(closest + 1, 0, dotX[i]);
 		nnY.splice(closest + 1, 0, dotY[i]);
+		console.log(nnX);
 	}
 }
+
+function SmallestIncrease()
+{
+	console.log(dotX);
+	console.log(dotY);
+	for (var i = 0; i < dotX.length; i++)
+	{
+		var closest = 0;
+		var increase = Number.MAX_VALUE;
+		for (var j = 0; j < nnX.length - 1; j++)
+		{
+			if (distance(nnX[j],dotX[i],nnY[j],dotY[i]) + distance(dotX[i],nnX[j+1],dotY[i],nnY[j+1])
+				 - distance(nnX[j],nnX[j+1],nnY[j],nnY[j+1]) < increase)
+			{
+				closest = j;
+				increase = distance(nnX[j],dotX[i],nnY[j],dotY[i]) + distance(dotX[i],nnX[j+1],dotY[i],nnY[j+1])
+				 - distance(nnX[j],nnX[j+1],nnY[j],nnY[j+1]);
+				console.log("point 1 to new point =" + distance(nnX[j],dotX[i],nnY[j],dotY[i]));
+				console.log("new point to point 2 =" + distance(dotX[i],nnX[j+1],dotY[i],nnY[j+1]));
+				console.log("old distance =" + distance(nnX[j],nnX[j+1],nnY[j],nnY[j+1]));
+				console.log("increase =" + increase);
+			}
+		}
+		if (distance(dotX[i],nnX[nnX.length - 1],dotY[i],nnY[nnY.length - 1]) < increase)
+		{
+			closest = nnX.length - 1;
+			increase = distance(dotX[i],nnX[nnX.length - 1],dotY[i],nnY[nnY.length - 1]);
+			console.log(increase);
+		}
+		console.log(closest);
+		nnX.splice(closest+1, 0, dotX[i]);
+		nnY.splice(closest+1, 0, dotY[i]);
+		console.log(nnX);
+		console.log(nnY);
+	}
+}	
 
 function distance(x1, x2, y1, y2) 
 {

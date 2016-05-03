@@ -3,11 +3,14 @@ body {
 }
 
 #button1 {
-	background-color:#77F;
+	background-color:#FF9966;
 	width:100px;
 }
 
-
+#button2 {
+	background-color:#66FF66;
+	width:100px;
+}	
 
 .listElement {
 	background-color:#77F;
